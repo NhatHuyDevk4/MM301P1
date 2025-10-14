@@ -1,11 +1,12 @@
 import { Assets as NavigationAssets } from '@react-navigation/elements';
 import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 import { Asset } from 'expo-asset';
-import { createURL } from 'expo-linking';
+import { createURL } from 'expo-linking'; // Tạo prefix cho deep link trong Expo
 import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
 import { useColorScheme } from 'react-native';
 import { Navigation } from './navigation';
+import Toast from 'react-native-toast-message';
 
 Asset.loadAsync([
   ...NavigationAssets,
@@ -13,7 +14,7 @@ Asset.loadAsync([
   require('./assets/bell.png'),
 ]);
 
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync(); // splash screen sẽ tự động ẩn khi ta gọi hàm SplashScreen.hideAsync()
 
 const prefix = createURL('/');
 
@@ -23,15 +24,18 @@ export function App() {
   const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme
 
   return (
-    <Navigation
-      theme={theme}
-      linking={{
-        enabled: 'auto',
-        prefixes: [prefix],
-      }}
-      onReady={() => {
-        SplashScreen.hideAsync();
-      }}
-    />
+    <>
+      <Navigation
+        theme={theme}
+        linking={{
+          enabled: 'auto',
+          prefixes: [prefix],
+        }}
+        onReady={() => {
+          SplashScreen.hideAsync();
+        }}
+      />
+      <Toast />
+    </>
   );
 }

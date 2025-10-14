@@ -13,12 +13,17 @@ import { Profile } from './screens/Profile';
 import { Settings } from './screens/Settings';
 import { Updates } from './screens/Updates';
 import { NotFound } from './screens/NotFound';
+import Login from './screens/Login';
+import Register from './screens/Register';
+import { Ionicons } from '@expo/vector-icons';
+import ProductDetail from './screens/ProductDetail';
 
 const HomeTabs = createBottomTabNavigator({
   screens: {
     Home: {
       screen: Home,
       options: {
+        headerShown: false,
         title: 'Feed',
         tabBarIcon: ({ color, size }) => (
           <Image
@@ -47,6 +52,16 @@ const HomeTabs = createBottomTabNavigator({
         ),
       },
     },
+    Settings: {
+      screen: Settings,
+      options: {
+        title: 'settings',
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="settings-outline" size={size} color={color} />
+        ),
+      },
+    }
   },
 });
 
@@ -71,16 +86,27 @@ const RootStack = createNativeStackNavigator({
         },
       },
     },
-    Settings: {
-      screen: Settings,
-      options: ({ navigation }) => ({
-        presentation: 'modal',
-        headerRight: () => (
-          <HeaderButton onPress={navigation.goBack}>
-            <Text>Close</Text>
-          </HeaderButton>
-        ),
-      }),
+    Login: {
+      screen: Login,
+      options: {
+        headerShown: false
+      },
+    },
+    ProductDetail: {
+      screen: ProductDetail,
+      options: {
+        title: 'Product Detail',
+        headerShown: true,
+      },
+      linking: { // linking là để định nghĩa đường dẫn động
+        path: 'product/:id',
+      }
+    },
+    Register: {
+      screen: Register,
+      options: {
+        headerShown: false
+      },
     },
     NotFound: {
       screen: NotFound,
@@ -100,6 +126,6 @@ type RootStackParamList = StaticParamList<typeof RootStack>;
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
+    interface RootParamList extends RootStackParamList { }
   }
 }
