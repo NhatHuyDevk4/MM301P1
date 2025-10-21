@@ -35,11 +35,7 @@ export function Home() {
     setRefreshing(false);
   }, [])
 
-  // console.log("accessToken", accessToken)
-  console.log("products", products)
-
   const renderItemList = ({ item }: { item: any }) => {
-    console.log("item", item)
     return (
       <TouchableOpacity
         onPress={() => navigate.navigate('ProductDetail', { id: item._id, name: item.name, img: item.images.url } as never)} //
