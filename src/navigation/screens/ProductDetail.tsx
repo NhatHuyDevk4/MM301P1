@@ -13,6 +13,8 @@ import { useRoute, useNavigation } from '@react-navigation/native'
 import { productApi } from '../../service/productApi'
 import { styles } from '../../styles/ProductDetail'
 import Toast from 'react-native-toast-message'
+import { cartApi } from '../../service/cartApi'
+import { useCart } from '../../context/CartContext'
 
 // {
 //     "images": {
@@ -74,6 +76,7 @@ interface IProductDetail {
 const ProductDetail = () => {
     const route = useRoute();
     const navigation = useNavigation();
+    const { refreshCartCount, getCartData } = useCart();
     const { id } = route.params as { id: string };
 
     const [product, setProduct] = useState<IProductDetail | null>(null);
@@ -109,19 +112,34 @@ const ProductDetail = () => {
         }
     }
 
-    const handleAddToCart = () => {
-        if (!product) return;
-
-        if (product.stock === 0) {
-            Alert.alert("Hết hàng", "Sản phẩm này hiện đã hết hàng");
+    const handleAddToCart = async () => {
+        if (!product) {
             return;
         }
 
-        Alert.alert(
-            "Thêm vào giỏ hàng",
-            `Đã thêm ${quantity} ${product.name} vào giỏ hàng`,
-            [{ text: "OK" }]
-        );
+        if (product.stock === 0) {
+            Toast.show({
+                type: 'error',
+                text1: 'Sản phẩm đã hết hàng.',
+            })
+            return;
+        }
+        try {
+            // console.log(product);
+            // console.log(quantity);
+            const res = await cartApi.addToCart(product._id, quantity);
+            console.log("res", res);
+            refreshCartCount();
+            Toast.show({
+                type: 'success',
+                text1: 'Thêm vào giỏ hàng thành công!',
+            })
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Thêm vào giỏ hàng thất bại. Vui lòng thử lại.',
+            })
+        }
     }
 
     const renderStars = (rating: number) => {

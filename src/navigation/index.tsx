@@ -5,7 +5,7 @@ import {
   StaticParamList,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 import bell from '../assets/bell.png';
 import newspaper from '../assets/newspaper.png';
 import { Home } from './screens/Home';
@@ -17,6 +17,9 @@ import Login from './screens/Login';
 import Register from './screens/Register';
 import { Ionicons } from '@expo/vector-icons';
 import ProductDetail from './screens/ProductDetail';
+import { Cart } from './screens/Cart';
+
+import { useCart } from '../context/CartContext';
 
 const HomeTabs = createBottomTabNavigator({
   screens: {
@@ -51,6 +54,46 @@ const HomeTabs = createBottomTabNavigator({
           />
         ),
       },
+    },
+    Cart: {
+      screen: Cart,
+      options: {
+        title: 'cart',
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => {
+          const { cartCount } = useCart();
+          return (
+            <>
+              <>
+                <Ionicons
+                  style={{
+                    position: 'relative',
+                  }}
+                  name="cart-outline" size={size} color={color} />
+                {cartCount > 0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      right: -6,
+                      top: -3,
+                      backgroundColor: 'red',
+                      borderRadius: 8,
+                      width: 16,
+                      height: 16,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text>
+                      {cartCount}
+                    </Text>
+                  </View>
+                )}
+              </>
+            </>
+          )
+        }
+      }
     },
     Settings: {
       screen: Settings,

@@ -7,6 +7,7 @@ import * as React from 'react';
 import { useColorScheme } from 'react-native';
 import { Navigation } from './navigation';
 import Toast from 'react-native-toast-message';
+import { CartProvider } from './context/CartContext';
 
 Asset.loadAsync([
   ...NavigationAssets,
@@ -24,7 +25,7 @@ export function App() {
   const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme
 
   return (
-    <>
+    <CartProvider>
       <Navigation
         theme={theme}
         linking={{
@@ -36,6 +37,6 @@ export function App() {
         }}
       />
       <Toast />
-    </>
+    </CartProvider>
   );
 }
